@@ -92,6 +92,7 @@ export default class Home extends PureComponent {
     newNetworkAdded: PropTypes.string,
     setNewNetworkAdded: PropTypes.func.isRequired,
     isSigningQRHardwareTransaction: PropTypes.bool.isRequired,
+    failedTransactionsToDisplayCount: PropTypes.number,
   };
 
   state = {
@@ -113,6 +114,7 @@ export default class Home extends PureComponent {
       swapsFetchParams,
       pendingConfirmations,
       isSigningQRHardwareTransaction,
+      failedTransactionsToDisplayCount,
     } = this.props;
     if (
       isNotification &&
@@ -128,7 +130,10 @@ export default class Home extends PureComponent {
       history.push(BUILD_QUOTE_ROUTE);
     } else if (firstPermissionsRequestId) {
       history.push(`${CONNECT_ROUTE}/${firstPermissionsRequestId}`);
-    } else if (unconfirmedTransactionsCount > 0) {
+    } else if (
+      unconfirmedTransactionsCount > 0 ||
+      failedTransactionsToDisplayCount > 0
+    ) {
       history.push(CONFIRM_TRANSACTION_ROUTE);
     } else if (suggestedAssets.length > 0) {
       history.push(CONFIRM_ADD_SUGGESTED_TOKEN_ROUTE);

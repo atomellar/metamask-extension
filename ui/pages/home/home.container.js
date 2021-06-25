@@ -18,6 +18,7 @@ import {
   getNewNetworkAdded,
   hasUnsignedQRHardwareTransaction,
   hasUnsignedQRHardwareMessage,
+  getFailedTransactionsToDisplayCount,
 } from '../../selectors';
 
 import {
@@ -122,6 +123,9 @@ const mapStateToProps = (state) => {
     seedPhraseBackedUp,
     newNetworkAdded: getNewNetworkAdded(state),
     isSigningQRHardwareTransaction,
+    failedTransactionsToDisplayCount: getFailedTransactionsToDisplayCount(
+      state,
+    ),
   };
 };
 
