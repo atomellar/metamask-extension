@@ -44,6 +44,7 @@ export default class ConfirmPageContainerContent extends Component {
     rejectNText: PropTypes.string,
     hideTitle: PropTypes.boolean,
     isFailedTransaction: PropTypes.bool,
+    onErrorMessageClick: PropTypes.func,
   };
 
   renderContent() {
@@ -72,10 +73,6 @@ export default class ConfirmPageContainerContent extends Component {
         </Tab>
       </Tabs>
     );
-  }
-
-  onErrorMessageClick(message) {
-    console.log(message);
   }
 
   render() {
@@ -109,6 +106,7 @@ export default class ConfirmPageContainerContent extends Component {
       onConfirmAnyways,
       hideConfirmAnyways,
       isFailedTransaction,
+      onErrorMessageClick,
     } = this.props;
 
     const primaryAction = hideUserAcknowledgedGasMissing
@@ -155,7 +153,7 @@ export default class ConfirmPageContainerContent extends Component {
               errorMessage={this.context.t('somethingWentWrong2')}
               errorKey={errorKey}
               linkText={this.context.t('moreDetails')}
-              onErrorMessageClick={() => this.onErrorMessageClick(errorMessage)}
+              onErrorMessageClick={() => onErrorMessageClick(errorMessage)}
             />
           </div>
         )}
