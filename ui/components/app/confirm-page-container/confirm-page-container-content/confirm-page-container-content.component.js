@@ -150,7 +150,7 @@ export default class ConfirmPageContainerContent extends Component {
         {!EIP_1559_V2 && !hasSimulationError && (errorKey || errorMessage) && (
           <div className="confirm-page-container-content__error-container">
             <ErrorMessage
-              errorMessage={this.context.t('somethingWentWrong2')}
+              errorMessage={this.context.t('somethingWentWrong')}
               errorKey={errorKey}
               linkText={this.context.t('moreDetails')}
               onErrorMessageClick={() => onErrorMessageClick(errorMessage)}
