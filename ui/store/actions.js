@@ -1064,7 +1064,7 @@ export function updateMetamaskState(newState) {
     const { currentNetworkTxList } = getState().metamask;
     const { currentNetworkTxList: newNetworkTxList } = newState;
 
-    const { transactionsToDisplayOnFailure = {} } = appState || {};
+    const { transactionsToDisplayOnFailure } = appState;
 
     if (currentLocale && newLocale && currentLocale !== newLocale) {
       dispatch(updateCurrentLocale(newLocale));
