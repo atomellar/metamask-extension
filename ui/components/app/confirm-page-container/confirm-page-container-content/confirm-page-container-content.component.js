@@ -47,7 +47,7 @@ export default class ConfirmPageContainerContent extends Component {
     hideUserAcknowledgedGasMissing: PropTypes.bool,
     unapprovedTxCount: PropTypes.number,
     rejectNText: PropTypes.string,
-    hideTitle: PropTypes.boolean,
+    hideTitle: PropTypes.bool,
     isFailedTransaction: PropTypes.bool,
   };
 
