@@ -155,7 +155,6 @@ export default class ConfirmPageContainerContent extends Component {
           <div className="confirm-page-container-content__error-container">
             {errorKey ? (
               <ErrorMessage
-                errorMessage={this.context.t('somethingWentWrong')}
                 errorKey={errorKey}
               />
             ) : (
