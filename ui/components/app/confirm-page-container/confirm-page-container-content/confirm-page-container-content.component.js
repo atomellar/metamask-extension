@@ -108,8 +108,6 @@ export default class ConfirmPageContainerContent extends Component {
       hideTitle,
       setUserAcknowledgedGasMissing,
       hideUserAcknowledgedGasMissing,
-      onConfirmAnyways,
-      hideConfirmAnyways,
       isFailedTransaction,
     } = this.props;
 
@@ -154,9 +152,7 @@ export default class ConfirmPageContainerContent extends Component {
         {!EIP_1559_V2 && !hasSimulationError && (errorKey || errorMessage) && (
           <div className="confirm-page-container-content__error-container">
             {errorKey ? (
-              <ErrorMessage
-                errorKey={errorKey}
-              />
+              <ErrorMessage errorKey={errorKey} />
             ) : (
               <DetailedErrorMessage
                 errorMessage={this.context.t('somethingWentWrong')}
