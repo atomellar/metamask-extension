@@ -23,6 +23,9 @@ import { useMaxPriorityFeePerGasInput } from './useMaxPriorityFeePerGasInput';
 import { useGasEstimates } from './useGasEstimates';
 import { useTransactionFunctions } from './useTransactionFunctions';
 
+// eslint-disable-next-line prefer-destructuring
+const EIP_1559_V2 = process.env.EIP_1559_V2;
+
 /**
  * @typedef {Object} GasFeeInputReturnType
  * @property {DecGweiString} [maxFeePerGas] - the maxFeePerGas input value.
@@ -117,10 +120,16 @@ export function useGasFeeInputs(
    * so that transaction is source of truth whenever possible.
    */
   useEffect(() => {
-    if (transaction?.userFeeLevel) {
+    if (EIP_1559_V2 && transaction?.userFeeLevel) {
       setEstimateUsed(transaction?.userFeeLevel);
+      setInternalEstimateToUse(transaction?.userFeeLevel);
     }
-  }, [setEstimateUsed, transaction, userPrefersAdvancedGas]);
+  }, [
+    setEstimateUsed,
+    setInternalEstimateToUse,
+    transaction,
+    userPrefersAdvancedGas,
+  ]);
 
   const [gasLimit, setGasLimit] = useState(() =>
     Number(hexToDecimal(transaction?.txParams?.gas ?? '0x0')),
@@ -142,6 +151,7 @@ export function useGasFeeInputs(
     maxFeePerGasFiat,
     setMaxFeePerGas,
   } = useMaxFeePerGasInput({
+    EIP_1559_V2,
     estimateToUse,
     gasEstimateType,
     gasFeeEstimates,
@@ -155,6 +165,7 @@ export function useGasFeeInputs(
     maxPriorityFeePerGasFiat,
     setMaxPriorityFeePerGas,
   } = useMaxPriorityFeePerGasInput({
+    EIP_1559_V2,
     estimateToUse,
     gasEstimateType,
     gasFeeEstimates,
@@ -215,14 +226,11 @@ export function useGasFeeInputs(
 
   const {
     updateTransaction,
-    updateTransactionUsingPriorityLevel,
+    updateTransactionUsingGasFeeEstimates,
   } = useTransactionFunctions({
     defaultEstimateToUse,
+    gasFeeEstimates,
     gasLimit,
-    gasPrice,
-    maxFeePerGas,
-    maxPriorityFeePerGas,
-    supportsEIP1559,
     transaction,
   });
 
@@ -308,6 +316,6 @@ export function useGasFeeInputs(
     hasSimulationError,
     supportsEIP1559,
     updateTransaction,
-    updateTransactionUsingPriorityLevel,
+    updateTransactionUsingGasFeeEstimates,
   };
 }
