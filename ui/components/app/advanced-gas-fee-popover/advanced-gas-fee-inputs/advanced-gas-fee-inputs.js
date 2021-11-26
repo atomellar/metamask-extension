@@ -6,7 +6,7 @@ import PriorityFeeInput from './priorityfee-input';
 
 const AdvancedGasFeeInputs = () => {
   return (
-    <Box className="advanced-gas-fee-input" margin={4}>
+    <Box className="advanced-gas-fee-input">
       <BasefeeInput />
       <div className="advanced-gas-fee-input__separator" />
       <PriorityFeeInput />
