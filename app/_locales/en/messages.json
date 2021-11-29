@@ -436,6 +436,9 @@
   "connectedSites": {
     "message": "Connected sites"
   },
+  "autoApprove": {
+    "message": "Auto Approve Spending"
+  },
   "connectedSitesDescription": {
     "message": "$1 is connected to these sites. They can view your account address.",
     "description": "$1 is the account name"

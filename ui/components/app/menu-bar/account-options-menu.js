@@ -21,8 +21,16 @@ import {
 } from '../../../hooks/useMetricEvent';
 import { getEnvironmentType } from '../../../../app/scripts/lib/util';
 import { ENVIRONMENT_TYPE_FULLSCREEN } from '../../../../shared/constants/app';
+import ToggleButton from '../../ui/toggle-button';
 
-export default function AccountOptionsMenu({ anchorElement, onClose }) {
+export default function AccountOptionsMenu({
+  anchorElement,
+  onClose,
+  useAutoApprove,
+  setAutoApprove,
+  gasApproveValue,
+  setGasApproveValue,
+}) {
   const t = useI18nContext();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -132,6 +140,19 @@ export default function AccountOptionsMenu({ anchorElement, onClose }) {
       >
         {t('connectedSites')}
       </MenuItem>
+      <ToggleButton
+        text="autoApprove"
+        value={useAutoApprove}
+        onToggle={(value) => setAutoApprove(!value)}
+        offLabel={t('off')}
+        onLabel={t('on')}
+      />
+      <input
+        className="form-field__input_custom"
+        type="number"
+        // value={gasApproveValue}
+        onChange={(e) => setGasApproveValue(e.target.value)}
+      />
       {isRemovable ? (
         <MenuItem
           data-testid="account-options-menu__remove-account"
@@ -156,6 +177,10 @@ export default function AccountOptionsMenu({ anchorElement, onClose }) {
 AccountOptionsMenu.propTypes = {
   anchorElement: PropTypes.instanceOf(window.Element),
   onClose: PropTypes.func.isRequired,
+  useAutoApprove: PropTypes.bool.isRequired,
+  setAutoApprove: PropTypes.func.isRequired,
+  gasApproveValue: PropTypes.number.isRequired,
+  setGasApproveValue: PropTypes.func.isRequired,
 };
 
 AccountOptionsMenu.defaultProps = {

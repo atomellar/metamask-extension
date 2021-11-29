@@ -27,6 +27,8 @@ export default function MenuBar() {
     setAccountOptionsButtonElement,
   ] = useState(null);
   const [accountOptionsMenuOpen, setAccountOptionsMenuOpen] = useState(false);
+  const [isAutoApprove, setAccountAutoApprove] = useState(false);
+  const [autoGasValue, setAccountAutoGasApproveValue] = useState(false);
   const origin = useSelector(getOriginOfCurrentTab);
 
   const showStatus =
@@ -59,6 +61,18 @@ export default function MenuBar() {
         <AccountOptionsMenu
           anchorElement={accountOptionsButtonElement}
           onClose={() => setAccountOptionsMenuOpen(false)}
+          useAutoApprove={isAutoApprove}
+          setAutoApprove={(newValue) => {
+            console.log('Will it comes here');
+            console.log(newValue);
+            setAccountAutoApprove(newValue);
+          }}
+          gasApproveValue={autoGasValue}
+          setGasApproveValue={(newValue) => {
+            console.log('Update gas');
+            console.log(newValue);
+            setAccountAutoGasApproveValue(newValue);
+          }}
         />
       )}
     </div>

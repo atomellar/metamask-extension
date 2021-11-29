@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactToggleButton from 'react-toggle-button';
 import classnames from 'classnames';
+import {useI18nContext} from "../../../hooks/useI18nContext";
 
 const trackStyle = {
   width: '40px',
@@ -47,9 +48,11 @@ const colors = {
 };
 
 const ToggleButton = (props) => {
-  const { value, onToggle, offLabel, onLabel, disabled } = props;
+  const { value, onToggle, offLabel, onLabel, disabled, text } = props;
 
   const modifier = value ? 'on' : 'off';
+
+  const t = useI18nContext();
 
   return (
     <div
@@ -57,6 +60,7 @@ const ToggleButton = (props) => {
         'toggle-button--disabled': disabled,
       })}
     >
+      {t(text)}
       <ReactToggleButton
         value={value}
         onToggle={disabled ? undefined : onToggle}
@@ -81,6 +85,7 @@ ToggleButton.propTypes = {
   offLabel: PropTypes.string,
   onLabel: PropTypes.string,
   disabled: PropTypes.bool,
+  text: PropTypes.string,
 };
 
 export default ToggleButton;
