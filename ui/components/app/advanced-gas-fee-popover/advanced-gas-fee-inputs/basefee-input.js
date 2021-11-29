@@ -59,7 +59,7 @@ const validateBaseFee = (value, gasFeeEstimates, maxPriorityFeePerGas) => {
   ) {
     return 'editGasMaxBaseFeeHigh';
   }
-  return '';
+  return undefined;
 };
 
 const BasefeeInput = () => {
