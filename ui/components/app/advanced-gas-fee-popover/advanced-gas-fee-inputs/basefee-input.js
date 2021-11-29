@@ -1,12 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
+import { HIGH_FEE_WARNING_MULTIPLIER } from '../../../../pages/send/send.constants';
 import { PRIORITY_LEVELS } from '../../../../../shared/constants/gas';
 import {
   divideCurrencies,
   multiplyCurrencies,
 } from '../../../../../shared/modules/conversion.utils';
 import { PRIMARY, SECONDARY } from '../../../../helpers/constants/common';
+import { bnGreaterThan, bnLessThan } from '../../../../helpers/utils/util';
 import { decGWEIToHexWEI } from '../../../../helpers/utils/conversions.util';
 import { getAdvancedGasFeeValues } from '../../../../selectors';
 import { useGasFeeContext } from '../../../../contexts/gasFee';
@@ -38,11 +40,40 @@ const multiplyCurrencyValues = (baseFee, value, numberOfDecimals) =>
     multiplierBase: 10,
   }).toNumber();
 
+const validateBaseFee = (value, gasFeeEstimates, maxPriorityFeePerGas) => {
+  if (bnGreaterThan(maxPriorityFeePerGas, value)) {
+    return 'editGasMaxBaseFeeImbalance';
+  }
+  if (
+    gasFeeEstimates?.low &&
+    bnLessThan(value, gasFeeEstimates.low.suggestedMaxFeePerGas)
+  ) {
+    return 'editGasMaxBaseFeeLow';
+  }
+  if (
+    gasFeeEstimates?.high &&
+    bnGreaterThan(
+      value,
+      gasFeeEstimates.high.suggestedMaxFeePerGas * HIGH_FEE_WARNING_MULTIPLIER,
+    )
+  ) {
+    return 'editGasMaxBaseFeeHigh';
+  }
+  return '';
+};
+
 const BasefeeInput = () => {
   const t = useI18nContext();
   const { gasFeeEstimates, estimateUsed, maxFeePerGas } = useGasFeeContext();
-  const { setDirty, setMaxFeePerGas } = useAdvanceGasFeePopoverContext();
+  const {
+    setDirty,
+    setHasError,
+    setMaxFeePerGas,
+    maxPriorityFeePerGas,
+  } = useAdvanceGasFeePopoverContext();
+
   const { estimatedBaseFee } = gasFeeEstimates;
+  const [baseFeeError, setBaseFeeError] = useState();
   const {
     numberOfDecimals: numberOfDecimalsPrimary,
   } = useUserPreferencedCurrency(PRIMARY);
@@ -115,10 +146,25 @@ const BasefeeInput = () => {
 
   useEffect(() => {
     setMaxFeePerGas(maxBaseFeeGWEI);
-  }, [maxBaseFeeGWEI, setMaxFeePerGas]);
+    const error = validateBaseFee(
+      maxBaseFeeGWEI,
+      gasFeeEstimates,
+      maxPriorityFeePerGas,
+    );
+    setBaseFeeError(error);
+    setHasError(Boolean(error));
+  }, [
+    gasFeeEstimates,
+    maxBaseFeeGWEI,
+    maxPriorityFeePerGas,
+    setHasError,
+    setBaseFeeError,
+    setMaxFeePerGas,
+  ]);
 
   return (
     <FormField
+      error={baseFeeError ? t(baseFeeError) : ''}
       onChange={updateBaseFee}
       titleText={t('maxBaseFee')}
       titleUnit={editingInGwei ? 'GWEI' : `(${t('multiplier')})`}
