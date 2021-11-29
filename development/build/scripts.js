@@ -525,15 +525,18 @@ function createNormalBundle({
 }) {
   return async function () {
     // create bundler setup and apply defaults
+    console.log('>>>>!!!!>>>> 1');
     const buildConfiguration = createBuildConfiguration();
     buildConfiguration.label = label;
     const { bundlerOpts, events } = buildConfiguration;
+    console.log('>>>>!!!!>>>> 2');
 
     // devMode options
     const reloadOnChange = Boolean(devMode);
     const minify = Boolean(devMode) === false;
 
     const envVars = getEnvironmentVariables({ buildType, devMode, testing });
+    console.log('>>>>!!!!>>>> envVars', envVars);
     setupBundlerDefaults(buildConfiguration, {
       buildType,
       devMode,
@@ -544,6 +547,7 @@ function createNormalBundle({
       reloadOnChange,
       shouldLintFenceFiles,
     });
+    console.log('>>>>!!!!>>>> 3');
 
     // set bundle entries
     bundlerOpts.entries = [...extraEntries];
@@ -554,9 +558,11 @@ function createNormalBundle({
     if (modulesToExpose) {
       bundlerOpts.require = bundlerOpts.require.concat(modulesToExpose);
     }
+    console.log('>>>>!!!!>>>> 4');
 
     // instrument pipeline
     events.on('configurePipeline', ({ pipeline }) => {
+      console.log('>>>>!!!!>>>> pipeline', pipeline);
       // convert bundle stream to gulp vinyl stream
       // and ensure file contents are buffered
       pipeline.get('vinyl').push(source(destFilepath));
@@ -568,8 +574,11 @@ function createNormalBundle({
         pipeline.get('dest').push(destination);
       });
     });
+    console.log('>>>>!!!!>>>> 5');
 
+    console.log('>>>>!!!!>>>> buildConfiguration', buildConfiguration);
     await bundleIt(buildConfiguration);
+    console.log('>>>>!!!!>>>> end');
   };
 }
 
